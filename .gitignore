@@ -1,0 +1,8 @@
+.env
+chatbot_model.h5
+tags.pkl
+words.pkl
+db.sqlite3
+*.pyc
+machine_learning_project/*.pyc
+chatbot/*.pyc

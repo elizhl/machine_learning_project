@@ -1,22 +1,19 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from keras.models import load_model
 
-import json
+import tensorflow as tf
 import numpy as np
+import json
 import pickle
 import random
 import spacy
 
-from keras.models import load_model
-import tensorflow as tf
-
-file_model = 'chatbot_model.h5'
 data_json = 'intents.json'
 words_file = 'words.pkl'
 tags_file = 'tags.pkl'
 
-model = load_model(file_model)
 intents = json.loads(open(data_json).read())
 words = pickle.load(open(words_file, 'rb'))
 tags = pickle.load(open(tags_file, 'rb'))
@@ -48,7 +45,7 @@ def bow(sentence, words, show_details=False):
                     print ("found in bag: %s" % w)
     return(np.array(bag))
 
-def predict_class(sentence, model):
+def predict_class(sentence):
     # filter out predictions below a threshold
     p = bow(sentence, words)
     file_model = 'chatbot_model.h5'
@@ -73,7 +70,7 @@ def getResponse(ints, intents_json):
     return result
 
 def chatbot_response(msg):
-    ints = predict_class(msg, model)
+    ints = predict_class(msg)
     res = getResponse(ints, intents)
     return res
 
